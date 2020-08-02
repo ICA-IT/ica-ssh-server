@@ -1,0 +1,28 @@
+[Package]
+version: 1
+depends: 
+
+[Product]
+type: localboot
+id: ica-ssh-server
+name: ica-ssh-server
+description: Install and setup openssh server on Windows 10
+advice: May cause problems if openssh server is already installed. If so, try "sfc /scannow" and reboot.
+version: 1.0
+priority: 0
+licenseRequired: False
+productClasses: 
+setupScript: setup.opsiscript
+uninstallScript: uninstall.opsiscript
+updateScript: 
+alwaysScript: 
+onceScript: 
+customScript: 
+userLoginScript: 
+
+[Changelog]
+ica-ssh-server (1.0-1) stable; urgency=low
+
+Project created with opsi Package Builder 8.4.4
+
+ -- John Kuras <jkuras@islandchristianacademy.com>  Sat, 01 Aug 2020 12:35:19 +0000

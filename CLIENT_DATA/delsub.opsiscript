@@ -1,0 +1,45 @@
+; Copyright (c) uib gmbh (www.uib.de)
+; This sourcecode is owned by uib gmbh
+; and published under the Terms of the General Public License.
+; credits: http://www.opsi.org/en/credits/
+
+include_append "%ScriptPath%\check_inno_exitcode.opsiscript"
+
+DefVar $found$
+DefVar $UninstallProgram$
+
+Set $found$     = "false"
+Set $MsiId$     = ''
+
+Message "Uninstalling " + $ProductId$ + " ..."
+
+comment "Check status of Openssh installation"
+set $ExitCode$ = powershellCall('Get-WindowsCapability -Online | ? Name -like "OpenSSH*"')
+sub_check_exitcode
+
+comment "Set ssh agent service start to manual"
+set $ExitCode$ = powershellCall('Set-Service -Name ssh-agent -StartupType "Manual"')
+sub_check_exitcode
+
+comment "Stop the ssh agent service"
+set $ExitCode$ = powershellCall('Set-Service -Name ssh-agent -Status Stopped -PassThru')
+sub_check_exitcode
+
+comment "Set ssh server service start to manual"
+set $ExitCode$ = powershellCall('Set-Service -Name sshd -StartupType "Manual"')
+sub_check_exitcode
+
+comment "Stop the ssh server service"
+set $ExitCode$ = powershellCall('Get-Service -Name sshd | Stop-Service -Force')
+sub_check_exitcode
+
+comment "Remove the Openssh Server optional feature"
+set $ExitCode$ = powershellCall('Remove-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0')
+sub_check_exitcode
+
+comment "Check status of Openssh installation"
+set $ExitCode$ = powershellCall('Get-WindowsCapability -Online | ? Name -like "OpenSSH*"')
+sub_check_exitcode
+
+;-----------------------------------------------------
+;-----------------------------------------------------
